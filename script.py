@@ -5,6 +5,7 @@ from random import shuffle
 import requests
 from time import sleep
 import string
+import re
 
 base_url = 'https://commonwealth-stamps.com'
 
@@ -58,10 +59,11 @@ def get_details(url):
         raw_text_parts = html_string.split('<b>Price:</b>')
         raw_text_parts2 = raw_text_parts[0].split('>SG ' + sg + '</b>')
         raw_text = raw_text_parts2[-1].strip()
-        raw_text = raw_text.replace('\r\n', ' ').replace('\t', ' ').replace('<br/>', '').strip()
+        raw_text = raw_text.replace('<br/>', ' ').replace('<br>', '').replace('<b>', '').strip()
+        raw_text = re.sub(r'<.*?>','',raw_text)
+        raw_text = raw_text.replace('\r\n', '').replace('\t', ' ').replace('\n', ' ').strip()
         stamp['raw_text'] = raw_text.replace('"',"'")
-    except Exception as e: 
-        print(e)
+    except: 
         pass 
   
     
